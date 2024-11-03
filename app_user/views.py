@@ -1,5 +1,6 @@
 from django.contrib.auth import authenticate
-from rest_framework import generics
+from rest_framework import generics, status
+from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -21,6 +22,12 @@ class LoginView(APIView):
         password = serializer.validated_data['password']
         user = authenticate(username=username, password=password)
         if user is not None:
-            return Response({'token': user.auth_token.key})
+            token, _ = Token.objects.get_or_create(user)
+            response = {
+                "token": token.key,
+                "username": user.username,
+                "phone_number": user.phone
+            }
+            return Response(response, status=status.HTTP_200_OK)
         else:
             return Response({'error': 'Invalid credentials'}, status=401)
