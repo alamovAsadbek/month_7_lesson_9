@@ -36,3 +36,8 @@ class RegisterSerializer(serializers.ModelSerializer):
         user.set_password(validated_data['password'])
         user.save()
         return user
+
+
+class LoginSerializer(serializers.Serializer):
+    username = serializers.CharField(max_length=15)
+    password = serializers.CharField(min_length=8, write_only=True)
