@@ -11,6 +11,7 @@ class ProductModel(models.Model):
     title = models.CharField(max_length=50)
     description = models.TextField()
     price = models.PositiveIntegerField()
+    status = models.CharField(choices=ProductStatus.choices, max_length=20)
 
     created_at = models.TimeField(auto_now_add=True)
     updated_at = models.TimeField(auto_now=True)
