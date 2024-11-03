@@ -18,6 +18,6 @@ class CommentView(generics.GenericAPIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def get(self, request, *args, **kwargs):
-        queryset = self.get_queryset()
+        queryset = CommentModel.objects.filter(user=request.user)
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
