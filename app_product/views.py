@@ -1,4 +1,5 @@
-from rest_framework import generics
+from rest_framework import generics, status
+from rest_framework.response import Response
 
 from .models import *
 from .serializers import ProductSerializer
@@ -20,3 +21,22 @@ class ProductViewForAdmin(generics.GenericAPIView):
 
     def get(self, request, *args, **kwargs):
         return ProductModel.objects.all()
+
+    def post(self, request, *args, **kwargs):
+        serializer = ProductSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return serializer.data
+
+    def put(self, request, *args, **kwargs):
+        product = ProductModel.objects.get(id=kwargs['pk'])
+        serializer = ProductSerializer(instance=product, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return serializer.data
+
+    def delete(self, request, *args, **kwargs):
+        product = ProductModel.objects.get(id=kwargs['pk'])
+        product.status = ProductStatus.deleted.value
+        product.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)
