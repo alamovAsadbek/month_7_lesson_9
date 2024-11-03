@@ -22,7 +22,7 @@ class LoginView(APIView):
         password = serializer.validated_data['password']
         user = authenticate(username=username, password=password)
         if user is not None:
-            token, _ = Token.objects.get_or_create(user)
+            token, _ = Token.objects.get_or_create(user=user)
             response = {
                 "token": token.key,
                 "username": user.username,
