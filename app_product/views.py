@@ -40,3 +40,10 @@ class ProductViewForAdmin(generics.GenericAPIView):
         product.status = ProductStatus.deleted.value
         product.save()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+    def patch(self, request, *args, **kwargs):
+        product = ProductModel.objects.get(id=kwargs['pk'])
+        serializer = ProductSerializer(instance=product, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return serializer.data
