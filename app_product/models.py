@@ -2,4 +2,4 @@ from django.db import models
 
 
 class ProductModel(models.Model):
-    pass
+    title = models.CharField(max_length=50)
