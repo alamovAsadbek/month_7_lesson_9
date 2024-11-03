@@ -6,9 +6,11 @@ from .models import *
 
 class RegisterSerializer(serializers.ModelSerializer):
     confirm_password = serializers.CharField(write_only=True)
-    phone_number = serializers.CharField(max_length=15, validators=[
-        UniqueValidator(queryset=UserModel.objects.all(), message="Phone number already exists")])
-    password = serializers.CharField(max_length=8, write_only=True)
+    phone_number = serializers.CharField(
+        max_length=15,
+        validators=[UniqueValidator(queryset=UserModel.objects.all(), message="Phone number already exists")]
+    )
+    password = serializers.CharField(max_length=128, write_only=True)
 
     class Meta:
         model = UserModel
@@ -27,13 +29,14 @@ class RegisterSerializer(serializers.ModelSerializer):
         phone_number = phone_number.strip()
         if not phone_number.startswith('+998'):
             raise serializers.ValidationError("Phone number must start with +998")
-        elif not phone_number[4:].isdigit():
-            raise serializers.ValidationError("Phone number must be a number")
+        if not phone_number[4:].isdigit():
+            raise serializers.ValidationError("Phone number must contain only digits after the country code")
+        return phone_number
 
     def create(self, validated_data):
-        validated_data.pop('confirm_password')
+        validated_data.pop('confirm_password')  # Remove the confirm_password field
         user = UserModel.objects.create_user(**validated_data)
-        user.set_password(validated_data['password'])
+        user.set_password(validated_data['password'])  # Ensure the password is hashed
         user.save()
         return user
 
