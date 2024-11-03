@@ -1,10 +1,13 @@
 from rest_framework import serializers
+from rest_framework.validators import UniqueValidator
 
 from .models import *
 
 
 class RegisterSerializer(serializers.ModelSerializer):
     confirm_password = serializers.CharField(write_only=True)
+    phone_number = serializers.CharField(max_length=15, validators=[
+        UniqueValidator(queryset=UserModel.objects.all(), message="Phone number already exists")])
 
     class Meta:
         model = UserModel
@@ -18,3 +21,10 @@ class RegisterSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Passwords do not match")
 
         return data
+
+    def validate_phone_number(self, phone_number: str):
+        phone_number = phone_number.strip()
+        if not phone_number.startswith('+998'):
+            raise serializers.ValidationError("Phone number must start with +998")
+        elif not phone_number[4:].isdigit():
+            raise serializers.ValidationError("Phone number must be a number")
