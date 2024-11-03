@@ -8,11 +8,11 @@ class RegisterSerializer(serializers.ModelSerializer):
     confirm_password = serializers.CharField(write_only=True)
     phone_number = serializers.CharField(max_length=15, validators=[
         UniqueValidator(queryset=UserModel.objects.all(), message="Phone number already exists")])
+    password = serializers.CharField(min_length=8, write_only=True)
 
     class Meta:
         model = UserModel
         fields = ['username', 'phone_number', 'password', 'confirm_password']
-        extra_kwargs = [{'password': {'write_only': True}}]
 
     def validate(self, data):
         password = data.get('password')
