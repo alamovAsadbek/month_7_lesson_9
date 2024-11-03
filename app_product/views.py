@@ -12,3 +12,11 @@ class ProductViewForUser(generics.ListAPIView):
         return ProductModel.objects.filter(
             status=ProductStatus.active.value
         )
+
+
+class ProductViewForAdmin(generics.GenericAPIView):
+    serializer_class = ProductSerializer
+    queryset = ProductModel.objects.all()
+
+    def get(self, request, *args, **kwargs):
+        return ProductModel.objects.all()
