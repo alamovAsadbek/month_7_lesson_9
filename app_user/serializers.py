@@ -8,7 +8,7 @@ class RegisterSerializer(serializers.ModelSerializer):
     confirm_password = serializers.CharField(write_only=True)
     phone_number = serializers.CharField(max_length=15, validators=[
         UniqueValidator(queryset=UserModel.objects.all(), message="Phone number already exists")])
-    password = serializers.CharField(min_length=8, write_only=True)
+    password = serializers.CharField(max_length=8, write_only=True)
 
     class Meta:
         model = UserModel
