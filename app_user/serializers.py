@@ -30,6 +30,7 @@ class RegisterSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Phone number must be a number")
 
     def create(self, validated_data):
+        validated_data.pop('confirm_password')
         user = UserModel.objects.create_user(**validated_data)
         user.set_password(validated_data['password'])
         user.save()
