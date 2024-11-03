@@ -1,4 +1,5 @@
 from rest_framework import generics, status
+from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 
 from .models import *
@@ -18,6 +19,7 @@ class ProductViewForUser(generics.ListAPIView):
 class ProductViewForAdmin(generics.GenericAPIView):
     serializer_class = ProductSerializer
     queryset = ProductModel.objects.all()
+    permission_classes = [IsAdminUser]
 
     def get(self, request, *args, **kwargs):
         return ProductModel.objects.all()
