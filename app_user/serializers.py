@@ -28,3 +28,9 @@ class RegisterSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Phone number must start with +998")
         elif not phone_number[4:].isdigit():
             raise serializers.ValidationError("Phone number must be a number")
+
+    def create(self, validated_data):
+        user = UserModel.objects.create_user(**validated_data)
+        user.set_password(validated_data['password'])
+        user.save()
+        return user
