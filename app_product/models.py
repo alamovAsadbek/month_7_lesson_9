@@ -1,6 +1,10 @@
 from django.db import models
 
 
+class ProductStatus(models.TextChoices):
+    pass
+
+
 class ProductModel(models.Model):
     title = models.CharField(max_length=50)
     description = models.TextField()
