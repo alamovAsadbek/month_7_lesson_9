@@ -21,3 +21,11 @@ class CommentView(generics.GenericAPIView):
         queryset = CommentModel.objects.filter(user=request.user)
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+
+    def delete(self, request, *args, **kwargs):
+        try:
+            instance = CommentModel.objects.get(id=kwargs['pk'], user=request.user)
+            instance.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except CommentModel.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
