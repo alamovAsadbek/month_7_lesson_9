@@ -6,6 +6,9 @@ class ProductModel(models.Model):
     description = models.TextField()
     price = models.PositiveIntegerField()
 
+    created_at = models.TimeField(auto_created=True)
+    updated_at = models.TimeField(auto_now_add=True)
+
     class Meta:
         verbose_name = 'Product'
         verbose_name_plural = 'Products'
