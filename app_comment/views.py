@@ -29,3 +29,23 @@ class CommentView(generics.GenericAPIView):
             return Response(status=status.HTTP_204_NO_CONTENT)
         except CommentModel.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
+
+    def put(self, request, *args, **kwargs):
+        try:
+            instance = CommentModel.objects.get(id=kwargs['pk'], user=request.user)
+            serializer = self.get_serializer(instance, data=request.data, partial=True)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except CommentModel.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+    def patch(self, request, *args, **kwargs):
+        try:
+            instance = CommentModel.objects.get(id=kwargs['pk'], user=request.user)
+            serializer = self.get_serializer(instance, data=request.data, partial=True)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except CommentModel.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
