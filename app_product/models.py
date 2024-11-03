@@ -2,7 +2,9 @@ from django.db import models
 
 
 class ProductStatus(models.TextChoices):
-    pass
+    active = 'active', 'Active'
+    deleted = 'deleted', 'Deleted'
+    not_available = 'not_available', 'Not available'
 
 
 class ProductModel(models.Model):
