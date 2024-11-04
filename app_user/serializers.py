@@ -34,9 +34,9 @@ class RegisterSerializer(serializers.ModelSerializer):
         return phone_number
 
     def create(self, validated_data):
-        validated_data.pop('confirm_password')  # Remove the confirm_password field
+        validated_data.pop('confirm_password')
         user = UserModel.objects.create_user(**validated_data)
-        user.set_password(validated_data['password'])  # Ensure the password is hashed
+        user.set_password(validated_data['password'])
         user.save()
         return user
 
